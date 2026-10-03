@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineHub — Movies & Web Series</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0b0b0f;color:#fff;font-family:Arial,sans-serif}
+header{background:#15151c;padding:18px 6%;display:flex;gap:25px;align-items:center;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:800;color:#ff3158}.search{margin-left:auto;background:#24242d;border:1px solid #333;border-radius:25px;padding:12px 18px;color:white;width:280px}
+nav{padding:15px 6%;background:#111118;display:flex;gap:10px;overflow:auto}button{background:#24242d;color:#fff;border:0;border-radius:20px;padding:10px 16px;cursor:pointer}button.active,button:hover{background:#ff3158}
+.hero{padding:55px 6%;background:linear-gradient(90deg,#15151c 20%,rgba(21,21,28,.65),rgba(21,21,28,.1));min-height:300px}
+.hero h1{font-size:48px;margin:0 0 12px}.hero p{max-width:600px;color:#c7c7ce;line-height:1.6}
+section{padding:25px 6%}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px}
+.card{background:#17171f;border-radius:12px;overflow:hidden;transition:.2s}.card:hover{transform:translateY(-5px)}
+.poster{height:260px;background:linear-gradient(145deg,#34344a,#181821);display:flex;align-items:center;justify-content:center;font-size:48px}
+.info{padding:13px}.info h3{font-size:16px;margin:0 0 7px}.info p{font-size:13px;color:#aaa;margin:0}
+.watch{display:inline-block;margin-top:12px;padding:8px 12px;background:#ff3158;color:white;text-decoration:none;border-radius:8px;font-size:13px}
+footer{padding:35px 6%;background:#111118;color:#888;margin-top:30px}
+@media(max-width:600px){.hero h1{font-size:34px}.search{width:150px}.poster{height:220px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">CineHub</div>
+<input id="search" class="search" placeholder="Search movies & series...">
+</header>
+<nav id="filters">
+<button class="active" data-cat="All">All</button>
+<button data-cat="Bollywood">Bollywood</button>
+<button data-cat="South">South</button>
+<button data-cat="Hollywood">Hollywood</button>
+<button data-cat="Punjabi">Punjabi</button>
+<button data-cat="Web Series">Web Series</button>
+<button data-cat="Animation">Animation</button>
+</nav>
+
+<div class="hero">
+<h1>Movies & Web Series</h1>
+<p>Discover movies and series by language and category. This starter site uses original UI and placeholder artwork; add only content and links you have the rights to publish.</p>
+<button onclick="document.getElementById('movies').scrollIntoView()">Explore Now</button>
+</div>
+
+<section id="movies">
+<h2>Latest Picks</h2>
+<div class="grid" id="grid"></div>
+</section>
+
+<footer>
+<strong>CineHub</strong><br><br>
+A legal movie discovery/catalog template. Replace the sample titles with licensed or public-domain content and official trailer/streaming links.
+</footer>
+
+<script>
+const movies=[
+ {title:"Example Bollywood Film",cat:"Bollywood",lang:"Hindi"},
+ {title:"Example South Film",cat:"South",lang:"Tamil / Hindi"},
+ {title:"Example Hollywood Film",cat:"Hollywood",lang:"English"},
+ {title:"Example Punjabi Film",cat:"Punjabi",lang:"Punjabi"},
+ {title:"Example Web Series",cat:"Web Series",lang:"Hindi"},
+ {title:"Example Animated Film",cat:"Animation",lang:"English"},
+ {title:"Another Bollywood Film",cat:"Bollywood",lang:"Hindi"},
+ {title:"Another South Film",cat:"South",lang:"Telugu / Hindi"}
+];
+
+const grid=document.getElementById("grid");
+function render(cat="All",q=""){
+ grid.innerHTML="";
+ movies.filter(m=>(cat==="All"||m.cat===cat)&&m.title.toLowerCase().includes(q.toLowerCase()))
+ .forEach((m,i)=>{
+  grid.innerHTML+=`<article class="card">
+   <div class="poster">🎬</div>
+   <div class="info"><h3>${m.title}</h3><p>${m.cat} • ${m.lang}</p>
+   <a class="watch" href="#" onclick="alert('Add your licensed/official movie or trailer URL here.');return false;">View Details</a></div>
+  </article>`;
+ });
+}
+render();
+document.querySelectorAll("#filters button").forEach(b=>b.onclick=()=>{
+ document.querySelectorAll("#filters button").forEach(x=>x.classList.remove("active"));
+ b.classList.add("active"); render(b.dataset.cat,document.getElementById("search").value);
+});
+document.getElementById("search").oninput=e=>{
+ const active=document.querySelector("#filters .active").dataset.cat; render(active,e.target.value);
+};
+</script>
+</body>
+</html>
